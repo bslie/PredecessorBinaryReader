@@ -78,7 +78,7 @@ public class PredecessorBinaryReader : BinaryReader
             userReader.BaseStream.Seek(heroNamePos + 28, SeekOrigin.Begin);
             user.HeroName = userReader.ReadStr();
 
-            var teamPos = FindLastPositionInStream(userReader, "HeroName");
+            var teamPos = FindLastPositionInStream(userReader, "Team");
             userReader.BaseStream.Seek(teamPos + 27, SeekOrigin.Begin);
             user.Team = userReader.ReadUInt32() > 0 ? Team.Dusk : Team.Dawn;
 
