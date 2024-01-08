@@ -27,7 +27,23 @@ public class PredecessorBinaryReader : BinaryReader
     public string ReadStr()
     {
         var length = ReadUInt32();
-        if (length == 0) return "";
+        if (length is < 1 or > 128)
+        {
+            return "";
+        }
+
+        var stringBytes = ReadBytes((int)length - 1);
+        return Encoding.UTF8.GetString(stringBytes);
+    }
+
+    public string ReadName()
+    {
+        var length = ReadUInt32();
+        if (length is < 1 or > 32) 
+        {
+            return "";
+        }
+
         var stringBytes = ReadBytes((int)length - 1);
         return Encoding.UTF8.GetString(stringBytes);
     }
@@ -53,18 +69,31 @@ public class PredecessorBinaryReader : BinaryReader
             var user = new User();
             userReader.BaseStream.Seek(30, SeekOrigin.Begin);
             user.UserId = Encoding.UTF8.GetString(userReader.ReadBytes(32));
-            userReader.Skip(39);
-            user.UserName = userReader.ReadStr();
-            userReader.Skip(40);
+
+            var userNamePos = FindLastPositionInStream(userReader, "Username");
+            userReader.BaseStream.Seek(userNamePos + 27, SeekOrigin.Begin);
+            user.UserName = userReader.ReadName();
+
+            var heroNamePos = FindLastPositionInStream(userReader, "HeroName");
+            userReader.BaseStream.Seek(heroNamePos + 28, SeekOrigin.Begin);
             user.HeroName = userReader.ReadStr();
-            userReader.Skip(35);
+
+            var teamPos = FindLastPositionInStream(userReader, "HeroName");
+            userReader.BaseStream.Seek(teamPos + 27, SeekOrigin.Begin);
             user.Team = userReader.ReadUInt32() > 0 ? Team.Dusk : Team.Dawn;
-            userReader.Skip(35);
+
+            var killsPos = FindLastPositionInStream(userReader, "Kills");
+            userReader.BaseStream.Seek(killsPos + 27, SeekOrigin.Begin);
             user.Kills = (int)userReader.ReadUInt32();
-            userReader.Skip(36);
+
+            var deathsPos = FindLastPositionInStream(userReader, "Deaths");
+            userReader.BaseStream.Seek(deathsPos + 27, SeekOrigin.Begin);
             user.Deaths = (int)userReader.ReadUInt32();
-            userReader.Skip(37);
+
+            var assistsPos = FindLastPositionInStream(userReader, "Assists");
+            userReader.BaseStream.Seek(assistsPos + 27, SeekOrigin.Begin);
             user.Assists = (int)userReader.ReadUInt32();
+
             users.Add(user);
         }
 
@@ -139,5 +168,20 @@ public class PredecessorBinaryReader : BinaryReader
         var length = end - start;
         var memoryStream = new MemoryStream(data, start, length);
         return new PredecessorBinaryReader(memoryStream);
+    }
+
+    private static long FindLastPositionInStream(BinaryReader reader, string searchString)
+    {
+        reader.BaseStream.Seek(0, SeekOrigin.Begin);
+        var data = reader.ReadBytes((int)reader.BaseStream.Length);
+        var str = Encoding.UTF8.GetString(data);
+        var position = str.IndexOf(searchString, StringComparison.Ordinal);
+
+        if (position == -1)
+        {
+            return -1;
+        }
+
+        return position + searchString.Length - 1;
     }
 }

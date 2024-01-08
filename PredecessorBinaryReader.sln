@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchEventDataReader", "MatchEventDataReader\MatchEventDataReader.csproj", "{259D9BB8-23E8-447A-93CA-942249F60782}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestReader", "TestReader\TestReader.csproj", "{2356F70D-AC77-4CEC-8674-7C5E80BBD339}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{259D9BB8-23E8-447A-93CA-942249F60782}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{259D9BB8-23E8-447A-93CA-942249F60782}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{259D9BB8-23E8-447A-93CA-942249F60782}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2356F70D-AC77-4CEC-8674-7C5E80BBD339}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2356F70D-AC77-4CEC-8674-7C5E80BBD339}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2356F70D-AC77-4CEC-8674-7C5E80BBD339}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2356F70D-AC77-4CEC-8674-7C5E80BBD339}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
